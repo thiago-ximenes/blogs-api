@@ -43,7 +43,7 @@ async function validateBodyEntrance(req, res, next) {
 
   const isValidPassword = await validatePassword(password);
   if (isValidPassword.message) {
-    return res.status(400).json({message: isValidPassword.message});
+    return res.status(400).json({ message: isValidPassword.message });
   }
 
   next();
