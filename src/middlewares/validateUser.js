@@ -53,7 +53,7 @@ function insertAuthorizationToken(req, _res, next) {
   const { email, displayName } = req.body;
 
   const user = { email, displayName };
-  const jwtSecret = process.env.SECRET;
+  const jwtSecret = process.env.JWT_SECRET;
 
   const token = jwt.sign({ data: user }, jwtSecret, jwtConfig);
 
