@@ -1,19 +1,23 @@
 const router = require('express').Router();
 const {
   verifyBodyRequisition,
+  verifyDisplayName,
   verifyEmail,
   verifyPassword,
-  validateBodyEntrance,
   insertAuthorizationToken,
+  validateFieldsExistence,
+  verifyEmailExistence,
 } = require('../middlewares/validateUser');
 const createUser = require('../controllers/createUser');
 
 router.post(
   '/',
   verifyBodyRequisition,
-  validateBodyEntrance,
-  verifyPassword,
+  validateFieldsExistence,
+  verifyDisplayName,
+  verifyEmailExistence,
   verifyEmail,
+  verifyPassword,
   insertAuthorizationToken,
   createUser,
 );

@@ -12,6 +12,7 @@ const {
 
 function verifyBodyRequisition(req, res, next) {
   const { email, password } = req.body;
+  console.log('middlware 1');
 
   if (!email) return res.status(400).json({ message: '"email" is required' });
 
@@ -22,22 +23,24 @@ function verifyBodyRequisition(req, res, next) {
 
 function verifyEmail(req, res, next) {
   const { email } = req.body;
-
+  console.log('middlware 5');
+  
   const isEmailValid = validateEmail(email);
-    if (isEmailValid.message) {
-      return res.status(400).json({ message: isEmailValid.message });
-    }
-
-    const isEmptyEmail = verifyEmptyEmail(email);
-    if (isEmptyEmail) {
-      return res.status(400).json({ message: isEmptyEmail.message });
-    }
+  if (isEmailValid.message) {
+    return res.status(400).json({ message: isEmailValid.message });
+  }
+  
+  const isEmptyEmail = verifyEmptyEmail(email);
+  if (isEmptyEmail) {
+    return res.status(400).json({ message: isEmptyEmail.message });
+  }
 
     next();
 }
 
 function verifyPassword(req, res, next) {
   const { password } = req.body;
+  console.log('middlware 6');
 
   const isValidPassword = validatePassword(password);
   if (isValidPassword.message) {
@@ -52,24 +55,39 @@ function verifyPassword(req, res, next) {
   next();
 }
 
-async function validateBodyEntrance(req, res, next) {
-  const { email, displayName } = req.body;
+function verifyDisplayName(req, res, next) {
+  const { displayName } = req.body;
+  console.log('middlware 3');
 
   const isDisplayNameValid = validateDisplayName(displayName);
   
+  console.log('4');
   if (isDisplayNameValid.message) {
      return res.status(400).json({ message: isDisplayNameValid.message });
-  }
-
-  const isThereAnExactEmail = await verifyEmailExistingEmail(email);
-  if (isThereAnExactEmail.message) {
-    return res.status(409).json({ message: isThereAnExactEmail.message });
   }
 
   next();
 }
 
+async function verifyEmailExistence(req, res, next) {
+  const { email } = req.body;
+  console.log('middlware 4');
+
+  console.log('aqui');
+  try {
+    const isThereAnExactEmail = await verifyEmailExistingEmail(email);
+    if (isThereAnExactEmail.message) {
+      return res.status(409).json({ message: isThereAnExactEmail.message });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+  next();
+}
+
 function insertAuthorizationToken(req, _res, next) {
+  console.log('6');
+
   const { email, displayName } = req.body;
 
   const user = { email, displayName };
@@ -79,23 +97,26 @@ function insertAuthorizationToken(req, _res, next) {
   next();
 }
 
-async function validateUserExistence(req, res, next) {
+async function validateFieldsExistence(req, res, next) {
   const { email } = req.body;
-
-  const userExist = await verifyUser(email);
-
-  if (!userExist.message) {
-    return res.status(400).json({ message: userExist.message });
+  
+  try {
+    const userExist = await verifyUser(email);
+    
+    if (userExist.message) {
+      return res.status(400).json({ message: userExist.message });
+    }
+  } catch (error) {
+    next();
   }
-
-  next();
 }
 
 module.exports = {
   verifyBodyRequisition,
-  validateBodyEntrance,
+  verifyDisplayName,
   insertAuthorizationToken,
   verifyEmail,
   verifyPassword,
-  validateUserExistence,
+  validateFieldsExistence,
+  verifyEmailExistence,
 };

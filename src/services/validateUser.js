@@ -18,7 +18,7 @@ function verifyEmptyEmail(email) {
     };
   }
 
-  return true;
+  return false;
 }
 
 function validateEmail(email) {
