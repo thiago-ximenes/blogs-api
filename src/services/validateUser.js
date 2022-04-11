@@ -60,8 +60,8 @@ function verifyEmptyPassword(password) {
 }
 
 async function verifyUser(email) {
-  const user = User.findOne({ where: { email } });
-
+  const user = await User.findOne({ where: { email } });
+  console.log(user);
   if (!user) {
     return {
       message: 'Invalid fields',

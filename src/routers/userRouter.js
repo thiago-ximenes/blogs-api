@@ -5,7 +5,6 @@ const {
   verifyEmail,
   verifyPassword,
   insertAuthorizationToken,
-  validateFieldsExistence,
   verifyEmailExistence,
 } = require('../middlewares/validateUser');
 const createUser = require('../controllers/createUser');
@@ -13,7 +12,6 @@ const createUser = require('../controllers/createUser');
 router.post(
   '/',
   verifyBodyRequisition,
-  validateFieldsExistence,
   verifyDisplayName,
   verifyEmailExistence,
   verifyEmail,

@@ -12,27 +12,27 @@ const {
 
 function verifyBodyRequisition(req, res, next) {
   const { email, password } = req.body;
-  console.log('middlware 1');
-
-  if (!email) return res.status(400).json({ message: '"email" is required' });
-
-  if (!password) return res.status(400).json({ message: '"password" is required' });
-
+  
+  if (email === undefined) {
+    return res.status(400).json({ message: '"email" is required' });
+  }
+  
+  if (password === undefined) return res.status(400).json({ message: '"password" is required' });
+  
   next();
 }
 
 function verifyEmail(req, res, next) {
   const { email } = req.body;
-  console.log('middlware 5');
-  
-  const isEmailValid = validateEmail(email);
-  if (isEmailValid.message) {
-    return res.status(400).json({ message: isEmailValid.message });
-  }
   
   const isEmptyEmail = verifyEmptyEmail(email);
   if (isEmptyEmail) {
     return res.status(400).json({ message: isEmptyEmail.message });
+  }
+  
+  const isEmailValid = validateEmail(email);
+  if (isEmailValid.message) {
+    return res.status(400).json({ message: isEmailValid.message });
   }
 
     next();
@@ -40,16 +40,15 @@ function verifyEmail(req, res, next) {
 
 function verifyPassword(req, res, next) {
   const { password } = req.body;
-  console.log('middlware 6');
-
-  const isValidPassword = validatePassword(password);
-  if (isValidPassword.message) {
-    return res.status(400).json({ message: isValidPassword.message });
-  }
-
+  
   const isPasswordEmpty = verifyEmptyPassword(password);
   if (isPasswordEmpty.message) {
     return res.status(400).json({ message: isPasswordEmpty.message });
+  }
+  
+  const isValidPassword = validatePassword(password);
+  if (isValidPassword.message) {
+    return res.status(400).json({ message: isValidPassword.message });
   }
 
   next();
@@ -57,7 +56,6 @@ function verifyPassword(req, res, next) {
 
 function verifyDisplayName(req, res, next) {
   const { displayName } = req.body;
-  console.log('middlware 3');
 
   const isDisplayNameValid = validateDisplayName(displayName);
   
@@ -71,9 +69,7 @@ function verifyDisplayName(req, res, next) {
 
 async function verifyEmailExistence(req, res, next) {
   const { email } = req.body;
-  console.log('middlware 4');
 
-  console.log('aqui');
   try {
     const isThereAnExactEmail = await verifyEmailExistingEmail(email);
     if (isThereAnExactEmail.message) {
@@ -86,13 +82,11 @@ async function verifyEmailExistence(req, res, next) {
 }
 
 function insertAuthorizationToken(req, _res, next) {
-  console.log('6');
-
   const { email, displayName } = req.body;
 
   const user = { email, displayName };
 
-  req.body.token = jwtGenerator(user);
+  req.headers.authorization = jwtGenerator(user);
 
   next();
 }

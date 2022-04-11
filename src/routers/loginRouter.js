@@ -3,21 +3,19 @@ const {
   verifyBodyRequisition,
   verifyEmail,
   verifyPassword,
-  validateBodyEntrance,
-  validateUserExistence,
   insertAuthorizationToken,
+  validateFieldsExistence,
 } = require('../middlewares/validateUser');
-const createUser = require('../controllers/createUser');
+const loginController = require('../controllers/loginController');
 
-router.get(
+router.post(
   '/',
   verifyBodyRequisition,
   verifyEmail,
   verifyPassword,
-  validateBodyEntrance,
-  validateUserExistence,
+  validateFieldsExistence,
   insertAuthorizationToken,
-  createUser,
+  loginController,
 );
 
 module.exports = router;
