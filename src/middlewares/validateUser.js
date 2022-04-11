@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+const jwtGenerator = require('../util/jwtGenerator');
 require('dotenv').config();
 const {
   validateEmail,
@@ -6,11 +6,6 @@ const {
   verifyEmailExistingEmail,
   validatePassword,
 } = require('../services/validateUser');
-
-const jwtConfig = {
-  expiresIn: '15m',
-  algorithm: 'HS256',
-};
 
 function verifyBodyRequisition(req, res, next) {
   const { email, password } = req.body;
@@ -53,11 +48,8 @@ function insertAuthorizationToken(req, _res, next) {
   const { email, displayName } = req.body;
 
   const user = { email, displayName };
-  const jwtSecret = process.env.JWT_SECRET;
 
-  const token = jwt.sign({ data: user }, jwtSecret, jwtConfig);
-
-  req.body.token = token;
+  req.body.token = jwtGenerator(user);
 
   next();
 }
