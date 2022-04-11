@@ -4,16 +4,18 @@ const {
   verifyEmail,
   verifyPassword,
   validateBodyEntrance,
+  validateUserExistence,
   insertAuthorizationToken,
 } = require('../middlewares/validateUser');
 const createUser = require('../controllers/createUser');
 
-router.post(
+router.get(
   '/',
   verifyBodyRequisition,
-  validateBodyEntrance,
-  verifyPassword,
   verifyEmail,
+  verifyPassword,
+  validateBodyEntrance,
+  validateUserExistence,
   insertAuthorizationToken,
   createUser,
 );

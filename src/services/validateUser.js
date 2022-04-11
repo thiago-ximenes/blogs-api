@@ -7,6 +7,17 @@ function validateDisplayName(displayName) {
       message: '"displayName" length must be at least 8 characters long',
     };
   }
+
+  return true;
+}
+
+function verifyEmptyEmail(email) {
+  if (email === '') {
+    return {
+      message: '"email" is not allowed to be empty',
+    };
+  }
+
   return true;
 }
 
@@ -40,9 +51,30 @@ function validatePassword(password) {
   return true;
 }
 
+function verifyEmptyPassword(password) {
+  if (password === '') {
+    return { message: '"password" is not allowed to be empty' };
+  }
+
+  return true;
+}
+
+async function verifyUser(email) {
+  const user = User.findOne({ where: { email } });
+
+  if (!user) {
+    return {
+      message: 'Invalid fields',
+    };
+  }
+}
+
 module.exports = {
   validateDisplayName,
   validateEmail,
   validatePassword,
   verifyEmailExistingEmail,
+  verifyEmptyEmail,
+  verifyEmptyPassword,
+  verifyUser,
 };
