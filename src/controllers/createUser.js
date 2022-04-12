@@ -1,8 +1,8 @@
 const { User } = require('../models');
 
 async function createUser(req, res) {
-  const { authorization: token } = req.headers;
   const {
+    token,
     displayName,
     password,
     email,

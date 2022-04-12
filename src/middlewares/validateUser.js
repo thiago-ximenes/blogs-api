@@ -1,4 +1,4 @@
-const jwtGenerator = require('../util/jwtGenerator');
+const jwtUtil = require('../util/jwt');
 require('dotenv').config();
 const {
   validateEmail,
@@ -59,7 +59,6 @@ function verifyDisplayName(req, res, next) {
 
   const isDisplayNameValid = validateDisplayName(displayName);
   
-  console.log('4');
   if (isDisplayNameValid.message) {
      return res.status(400).json({ message: isDisplayNameValid.message });
   }
@@ -86,7 +85,7 @@ function insertAuthorizationToken(req, _res, next) {
 
   const user = { email, displayName };
 
-  req.headers.authorization = jwtGenerator(user);
+  req.headers.authorization = jwtUtil.jwtGenerator(user);
 
   next();
 }
@@ -105,6 +104,27 @@ async function validateFieldsExistence(req, res, next) {
   }
 }
 
+function validateToken(req, res, next) {
+  const { authorization } = req.headers;
+
+  try {
+    jwtUtil.jwtVerify(authorization);
+    next();
+  } catch (error) {
+    return res.status(401).json({ message: 'Expired or invalid token' });
+  }
+}
+
+function verifyToken(req, res, next) {
+  const { authorization } = req.headers;
+  
+  if (!authorization) {
+    return res.status(401).json({ message: 'Token not found' });
+  }
+  
+  next();
+}
+
 module.exports = {
   verifyBodyRequisition,
   verifyDisplayName,
@@ -113,4 +133,6 @@ module.exports = {
   verifyPassword,
   validateFieldsExistence,
   verifyEmailExistence,
+  verifyToken,
+  validateToken,
 };

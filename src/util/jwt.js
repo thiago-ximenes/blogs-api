@@ -1,8 +1,9 @@
+require('dotenv').config();
 const jwt = require('jsonwebtoken');
 
-function jwtGenerator(userInfo) {
 const jwtSecret = process.env.JWT_SECRET;
 
+function jwtGenerator(userInfo) {
   const jwtConfig = {
     expiresIn: '15m',
     algorithm: 'HS256',
@@ -11,4 +12,11 @@ const jwtSecret = process.env.JWT_SECRET;
   return jwt.sign({ data: userInfo }, jwtSecret, jwtConfig);
 }
 
-module.exports = jwtGenerator;
+function jwtVerify(token) {
+  return jwt.verify(token, jwtSecret);
+}
+
+module.exports = {
+  jwtGenerator,
+  jwtVerify,
+};
