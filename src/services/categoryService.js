@@ -6,6 +6,11 @@ async function create(name) {
   });
 }
 
+async function getCategories() {
+  return Category.findAll();
+}
+
 module.exports = {
   create,
+  getCategories,
 };
