@@ -8,9 +8,11 @@ const {
   verifyEmailExistence,
   verifyToken,
   validateToken,
+  validateUserId,
 } = require('../middlewares/validateUser');
 const createUser = require('../controllers/createUser');
 const getUser = require('../controllers/getUser');
+const getUserById = require('../controllers/getUserById');
 
 router.post(
   '/',
@@ -28,6 +30,14 @@ router.get(
   verifyToken,
   validateToken,
   getUser,
+  );
+
+  router.get(
+    '/:id',
+    verifyToken,
+    validateToken,
+    validateUserId,
+    getUserById,
   );
 
 module.exports = router;

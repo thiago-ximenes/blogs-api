@@ -8,6 +8,7 @@ const {
   verifyEmptyEmail,
   verifyEmptyPassword,
   verifyUser,
+  verifyUserId,
 } = require('../services/validateUser');
 
 function verifyBodyRequisition(req, res, next) {
@@ -125,6 +126,21 @@ function verifyToken(req, res, next) {
   next();
 }
 
+async function validateUserId(req, res, next) {
+  const { id } = req.params;
+  
+  try {
+    const userExist = await verifyUserId(id);
+    
+    if (userExist.message) {
+      return res.status(404).json({ message: userExist.message });
+    }
+  } catch (error) {
+    console.error(error.message);
+  }
+  next();
+}
+
 module.exports = {
   verifyBodyRequisition,
   verifyDisplayName,
@@ -135,4 +151,5 @@ module.exports = {
   verifyEmailExistence,
   verifyToken,
   validateToken,
+  validateUserId,
 };

@@ -68,6 +68,15 @@ async function verifyUser(email) {
   }
 }
 
+async function verifyUserId(id) {
+  const user = await User.findOne({ where: { id } });
+  if (!user) {
+    return {
+      message: 'User does not exist',
+    };
+  }
+}
+
 module.exports = {
   validateDisplayName,
   validateEmail,
@@ -76,4 +85,5 @@ module.exports = {
   verifyEmptyEmail,
   verifyEmptyPassword,
   verifyUser,
+  verifyUserId,
 };
