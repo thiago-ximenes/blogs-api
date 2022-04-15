@@ -5,13 +5,13 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false,
   });
 
-  // Category.associate = (models) => {
-  //     Category.belongsToMany(models.Post, {
-  //         through: 'PostCategory',
-  //         foreignKey: 'categoryId',
-  //         as: 'posts',
-  //     });
-  // };
+//   Category.associate = (models) => {
+//       Category.belongsToMany(models.BlogPost, {
+//           through: 'PostCategory',
+//           foreignKey: 'categoryId',
+//           as: 'BlogPosts',
+//       });
+//   };
 
   return Category;
 };
